@@ -34,6 +34,7 @@ function list(){
 </script>
 </head>
 <body>
+<div class="container">
 <div class="row">
 <div class="col-lg-12">
 <h1 class="page-header">수정페이지</h1>
@@ -42,9 +43,9 @@ function list(){
 
 <div class="row">
 <div class="col-lg-12">
-<div class="panel panel-default">
-<div class="panel-heading">수정</div>
-<div class="panel-body">
+<div class="card">
+<div class="card-header">수정</div>
+<div class="card-body">
 
 
 <form  action="/board/modify" method="post">
@@ -87,6 +88,6 @@ ${board.content }
 </div>
 </div>
 
-
+</div>
 </body>
 </html>

@@ -9,7 +9,7 @@
 
   <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="/resources/a/adminlte.css">
 
 
    <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -59,7 +59,7 @@
                 <input type='hidden' name='amount' value='${pageMaker.cri.amount}'>
                 </form>
 
-
+<div class="container">
   <!-- Page Wrapper -->
   
         <!-- End of Topbar -->
@@ -89,7 +89,7 @@
                   <td>${board.bno}</td>
                   <td><a href="${con}/board/get?bno=${board.bno}"> ${board.title}</a></td>
                   <td>${board.writer}</td>
-                  <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate }"/>></td>
+                  <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate }"/></td>
                   <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}"/></td>
                   </tr>
                   </c:forEach>
@@ -110,7 +110,7 @@
                 <option value="TWC">제목 OR 내용 OR 작성자</option>
                 
                 </select>
-                <input type='text' name='keyword' />
+                <input type='text' name='keyword' class="form-control">
                 <input type='hidden' name='pageNum' value='${pageMaker.cri.pageNum}'>
                 <input type='hidden' name='amount' value='${pageMaker.cri.amount }'>
                 <button class='btn btn-default'> Search</button>
@@ -129,7 +129,7 @@
                 </c:if>
                 
                 <c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage}">
-                <li class="page-item"><a class="page-link" href="${num}">${num}</a></li>
+                <li class="page-item ${pageMaker.cri.pageNum == num ? "active":""}"><a class="page-link" href="${num}">${num}</a></li>
                 
                 </c:forEach>
                 
@@ -154,7 +154,7 @@
 
       <!-- Footer -->
    
-      
+      </div>
 
 </body>
 

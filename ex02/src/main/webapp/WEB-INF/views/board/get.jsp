@@ -22,44 +22,164 @@
  
 
   <!-- Custom styles for this page -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="/resources/a/adminlte.css">
   <script src="http://code.jquery.com/jquery-latest.js"></script>
-  <script type="text/javascript">
-  $(document).ready(function(){
-	  var op=$("#operForm");
-	  
-	  $("button[data-oper='modify']").on("click",function(e){
-		
-		  op.attr("action","/board/modify").submit();
-	  
-	  });
-	  
-	  $("button[data-oper='list']").on("click",function(e){
-		  op.find("#bno").remove();
-		  op.attr("action","/board/list");
-		  op.submit();
-	  })
-	  
-	  
-	  
-  })
+  <script type="text/javascript" src="/resources/js/reply.js">
+  </script>
+    <script type="text/javascript">
+
+   
+
+    $(document).ready(function(){
+    	 var op=$("#operForm");
+   	  
+   
+    	var bnov=${board.bno};
+    	var repUL= $("#a");
+    	showList(1);
+    	function time(d){
+    		var a = new Date(d);
+    		var yy= a.getFullYear();
+    		var mm=a.getMonth();
+    		var dd=a.getDate();
+    		var hh=a.getHours();
+    		var m=a.getMinutes();
+    		var s=a.getSeconds();
+    		
+    		return " "+yy+"년 "+mm+"월 "+dd+"일 "+hh+"시 "+m+"분 "+s+"초 "
+    		
+    		
+    	}
+    	
+    	function showList(page){
+    		getList({bno:bnov,page:page||1},function(list){
+    			var str="";
+    		if(list==null || list.length==0){
+    			repUL.html("");
+    			return;
+    		}
+    		var i=0;
+    		var len=list.length;
+    		for(;i<len;i++){
+    			str+="<div class='direct-chat-msg'>";
+    			str+="<div class='direct-chat-info clearfix'>";
+    			str+="<span class='direct-chat-name pull-left'>"+list[i].replyer+"</span>";
+    			str+="<span class='direct-chat-timestamp pull-right'>"+time(list[i].replyDate)+"</span>";
+    			str+="</div>";
+    			str+="<div class='direct-chat-text'>"+list[i].reply+"</div>";
+    			str+="<a href='#' data-n='"+list[i].rno+"'>삭제</a>";
+    			str+="</div>";
+    			
+    			
+    		}
+    		repUL.html(str);
+    	});
+    	}
+    	
+    	function getList(param,callback,error){
+    		var bno=param.bno;
+    		var page=param.page || 1;
+    		
+    		$.getJSON("/replies/pages/"+bno+"/"+page+".json",
+    		function(data){
+    			if(callback){
+    				callback(data);
+    			}
+    		}	
+    		).fail(function(xhr,status,err){
+    			if(error){
+    				error();
+    			}
+    		});
+    	}
+    	
+    	function del(rno){
+    		$.ajax({
+    			type:"delete",
+    			url:"/replies/"+rno,
+    			contentType:"application/json; charset=utf-8",
+    			success:function(){
+    				alert("삭제완료");
+    			}
+    			
+    		})
+    		
+    	}
+    	
+    	
+    
+    	$("#a").on("click","a",function(e){
+    		e.preventDefault;
+    		var v=$(this).data("n");
+    		del(v);
+    		showList(1);
+    		
+    	})
+    	
+    	 $("button[data-a='cre']").on("click",function(){
+    		 var n=$("input[data-i='n']").val();
+    	    	var c=$("input[data-i='c']").val();
+    	    	
+    	    	var o={bno:bnov,reply:c,replyer:n};
+    		 alert(n+c);
+    		 $.ajax({
+    			 url:'/replies/new',
+    			 type:'post',
+    			 dataType:'json',
+    			 data:JSON.stringify(o),
+    			 contentType:"application/json; charset=utf-8",
+    			 success:function(){
+    				 alert("등록 성공!");
+    				
+    				
+    			 }
+    		 })
+    		 showList(1);
+    		 
+    	 })
+    	 
+    	 	  $("button[data-oper='modify']").on("click",function(e){
+   		
+   		  op.attr("action","/board/modify").submit();
+   	  
+   	  });
+   	  
+   	  $("button[data-oper='list']").on("click",function(e){
+   		  op.find("#bno").remove();
+   		  op.attr("action","/board/list");
+   		  op.submit();
+   	  })
+    	
+    		
+    
+    	
+    });
+    
+    		
+   
   
   
   </script>
 
+
+  
+  
+ 
+
 </head>
 <body>
+<div class="container">
 <div class="row">
 <div class="col-lg-12">
-<h1 class="page-header"> </h1>
+<h1 class="page-header">  ${board.bno}번 글</h1>
 </div>
 </div>
 
 <div class="row">
 <div class="col-lg-12">
-<div class="panel panel-default">
-<div class="panel-heading">board register</div>
-<div class="panel-body">
+<div class="card">
+<div class="card-header">board register</div>
+<div class="card-body">
 <div class="form-group">
 <label>글번호</label>
 <input class="form-control" name='bno' value="${board.bno }" readonly>
@@ -105,6 +225,49 @@ class="btn btn-info" > 리스트 </button>
 </div>
 </div>
 </div>
+
+
+
+
+
+<div class="card">
+<div class="row">
+<div class="col-lg-12">
+
+<div class="card-header">
+<strong> 댓글</strong>
+</div>
+<div id="a" class="direct-chat-messages">
+</div>
+
+<div class="card-body">
+<div class="form-group">
+<label> 이름 </label>
+<input class="form-control" data-i="n">
+</div>
+<div class="form-group">
+<label> 내용</label>
+<input class="form-control" data-i="c"> 
+</div>
+
+<button class="btn btn-primary" data-a="cre"> 등록! </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </body>

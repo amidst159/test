@@ -30,17 +30,18 @@
 
 </head>
 <body>
+<div class="container">
 <div class="row">
 <div class="col-lg-12">
-<h1 class="page-header">보드 레지스터!</h1>
+<div style="padding-bottom:30px;"><h1 class="page-header">글 쓰기</h1></div>
 </div>
 </div>
 
 <div class="row">
 <div class="col-lg-12">
-<div class="panel panel-default">
-<div class="panel-heading">board register</div>
-<div class="panel-body">
+<div class="card">
+<div class="card-header">글쓰기</div>
+<div class="card-body">
 
 
 <form  action="/board/register" method="post">
@@ -55,7 +56,7 @@
 
 <div class="form-group">
 <label>Writer</label><input class="form-control" name='writer' required>
-<button type="submit" class="btn btn-default">submit button</button>
+<div style="margin-top:30px;"><button type="submit" class="btn btn-primary">submit button</button></div>
 </div>
 
 
@@ -69,6 +70,7 @@
 
 
 
+</div>
 </div>
 </div>
 </div>
