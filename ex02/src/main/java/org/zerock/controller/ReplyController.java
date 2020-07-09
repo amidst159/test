@@ -1,7 +1,5 @@
 package org.zerock.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.zerock.domain.Criteria;
+import org.zerock.domain.ReplyPageDTO;
 import org.zerock.domain.ReplyVO;
 import org.zerock.service.ReplyServiceImpl;
 
@@ -26,11 +25,7 @@ public class ReplyController {
 
 	@Autowired
 	private ReplyServiceImpl service;
-	@GetMapping(value="/a")
-	public String a () {
-	
-		return "home";
-	}
+
 	@PostMapping(value="/new",consumes="application/json",
 			produces= {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> create(@RequestBody ReplyVO vo){
@@ -43,11 +38,11 @@ public class ReplyController {
 			produces= {
 					MediaType.APPLICATION_XML_VALUE,
 					MediaType.APPLICATION_JSON_UTF8_VALUE})
-	public ResponseEntity<List<ReplyVO>> getList(
+	public ResponseEntity<ReplyPageDTO> getList(
 			@PathVariable("page") int page,
 			@PathVariable("bno") Long bno){
 		Criteria cri = new Criteria(page,10);
-		return new ResponseEntity<>(service.getList(cri, bno),HttpStatus.OK);
+		return new ResponseEntity<>(service.getListPage(cri,bno),HttpStatus.OK);
 	}
 	@GetMapping(value="/{rno}",
 			produces= {MediaType.APPLICATION_XML_VALUE,

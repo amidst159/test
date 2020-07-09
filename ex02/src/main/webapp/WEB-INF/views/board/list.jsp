@@ -54,6 +54,7 @@
 
 </head>
 <body>
+
   <form id='actionForm' action="/board/list" method='get'>
                 <input type='hidden' name='pageNum' value='${pageMaker.cri.pageNum}'>
                 <input type='hidden' name='amount' value='${pageMaker.cri.amount}'>
@@ -68,7 +69,7 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">게시판</h1>
+          <h1 class="h3 mb-2 text-gray-800">원두경의 게시판</h1>
           
 
         
@@ -110,7 +111,7 @@
                 <option value="TWC">제목 OR 내용 OR 작성자</option>
                 
                 </select>
-                <input type='text' name='keyword' class="form-control">
+                <input type='text' name='keyword' >
                 <input type='hidden' name='pageNum' value='${pageMaker.cri.pageNum}'>
                 <input type='hidden' name='amount' value='${pageMaker.cri.amount }'>
                 <button class='btn btn-default'> Search</button>

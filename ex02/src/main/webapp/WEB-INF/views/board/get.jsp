@@ -31,7 +31,9 @@
    
 
     $(document).ready(function(){
+    	var pageNum=1;
     	 var op=$("#operForm");
+    	 var k=$("#k");
    	  
    
     	var bnov=${board.bno};
@@ -52,8 +54,13 @@
     	}
     	
     	function showList(page){
-    		getList({bno:bnov,page:page||1},function(list){
+    		getList({bno:bnov,page:page||1},function(replyCnt,list){
     			var str="";
+    			if(page==-1){
+    				pageNum=Math.ceil(replyCnt/10.0);
+    				showList(pageNum);
+    				return;
+    			}
     		if(list==null || list.length==0){
     			repUL.html("");
     			return;
@@ -73,6 +80,7 @@
     			
     		}
     		repUL.html(str);
+    		showReplyPage(replyCnt);
     	});
     	}
     	
@@ -83,7 +91,7 @@
     		$.getJSON("/replies/pages/"+bno+"/"+page+".json",
     		function(data){
     			if(callback){
-    				callback(data);
+    				callback(data.replyCnt,data.list);
     			}
     		}	
     		).fail(function(xhr,status,err){
@@ -121,7 +129,6 @@
     	    	var c=$("input[data-i='c']").val();
     	    	
     	    	var o={bno:bnov,reply:c,replyer:n};
-    		 alert(n+c);
     		 $.ajax({
     			 url:'/replies/new',
     			 type:'post',
@@ -134,13 +141,15 @@
     				
     			 }
     		 })
-    		 showList(1);
+    		 showList(-1);
+    		 alert("등록성공");
     		 
     	 })
     	 
     	 	  $("button[data-oper='modify']").on("click",function(e){
    		
-   		  op.attr("action","/board/modify").submit();
+   		  op.attr("action","/board/modify");
+   		  op.submit();
    	  
    	  });
    	  
@@ -150,8 +159,41 @@
    		  op.submit();
    	  })
     	
-    		
-    
+    		function showReplyPage(replyCnt){
+   		  var endNum=Math.ceil(pageNum/10.0)*10;
+   		  var startNum=endNum-9;
+   		  
+   		  var prev=startNum!=1;
+   		  var next=false;
+   		  
+   		  if(endNum*10>=replyCnt){
+   			  endNum=Math.ceil(replyCnt/10.0);
+   		  }
+   		  if(endNum*10<replyCnt){
+   			  next=true;
+   		  }
+   		  var str="<ul class='pagination justify-content-center'>";
+   		  
+   		  if(prev){
+   			  str+="<li class='page-item'><a class='page-link' href='"+(startNum-1)+"'>prev</a></li>";
+   		  }
+   		  
+   		  for(var i=startNum;i<=endNum;i++){
+   			  var active=pageNum==i? "active":"";
+   			  str+="<li class='page-item"+active+"'><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+   		  }
+   		  str+="</ul>";
+   		  k.html(str);
+   		  
+   	  }
+   	  
+   	  
+    k.on("click","li a",function(e){
+    	e.preventDefault();
+    	var target=$(this).attr("href");
+    	pageNum=target;
+    	showList(pageNum);
+    })
     	
     });
     
@@ -168,6 +210,7 @@
 
 </head>
 <body>
+
 <div class="container">
 <div class="row">
 <div class="col-lg-12">
@@ -238,6 +281,8 @@ class="btn btn-info" > 리스트 </button>
 <strong> 댓글</strong>
 </div>
 <div id="a" class="direct-chat-messages">
+</div>
+<div id="k">
 </div>
 
 <div class="card-body">

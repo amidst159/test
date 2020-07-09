@@ -30,9 +30,12 @@
 
 </head>
 <body>
+
 <div class="container">
+
 <div class="row">
 <div class="col-lg-12">
+
 <div style="padding-bottom:30px;"><h1 class="page-header">글 쓰기</h1></div>
 </div>
 </div>

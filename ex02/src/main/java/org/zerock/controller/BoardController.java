@@ -28,10 +28,7 @@ public class BoardController {
 	@Autowired
 	BoardVO v;
 	
-	@GetMapping("/NewFile")
-	public void NewFile() {
-		
-	}
+	
 	@GetMapping("/list")
 	public void list(Criteria cri,Model model) {
 		model.addAttribute("list",service.getList(cri));
